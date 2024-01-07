@@ -9,9 +9,9 @@ np.random.seed(42) #
 
 def create_spiral():
     '''Creates data points and a spiral graph with the below N,D,K parameters. 
-        The numbers are not input by the user for simplicity in for this assignment'''
-    
-    N = 500 # number of points per class
+        Only the number of data points is input by the user for simplicity'''
+    print()
+    N = int(input("Enter the number of data points per spiral segment (100 - 1000 recommended): ")) #number of points per class
     D = 2 # dimensionality 
     K = 2 # number of spokes
 
@@ -71,7 +71,7 @@ def initialize_parameters(n_x, n_h, n_y):
                     b2 -- bias vector of shape (n_y, 1)
     """
     
-    np.random.seed(42) # we set up a seed so that your output matches ours although the initialization is random.
+    np.random.seed(42) 
 
     W1 = np.random.randn(n_h, n_x) * 0.01
     b1 = np.zeros((n_h,1))
@@ -112,7 +112,7 @@ def forward_propagation(X, parameters):
     W2 = parameters['W2']
     b2 = parameters['b2']
     
-    ### END CODE HERE ###
+ 
     
     # Implement Forward Propagation
     Z1 = np.dot(W1,X) + b1
@@ -310,25 +310,35 @@ def plot_decision_boundary_NN(func, x_input, y_input, ax=None):
 
 if __name__ == "__main__":
     print()
-    input("This script creates a 2D, 2 spoke spiral of 500 points and uses a basic neural net to determine a decision boundary and classify the data points into 2 groups. Output graphs and text will be displayed. Close graph windows to continue script. Press ENTER to continue: ")
+    input("This script creates a 2D, 2 spoke spiral of a user defined number of points and uses a basic neural net to determine a decision boundary and classify the data points into 2 groups. Output graphs and text will be displayed. Close graph windows to continue script. Press ENTER to continue: ")
     
+    #creating data points and display graph
     X, Y = create_spiral()
+    
+    #initializing model
     (n_x, n_h, n_y) = layer_sizes(X, Y)
     print()
     print("The size of the input layer is: n_x = " + str(n_x))
     print("The size of the hidden layer is: n_h = " + str(n_h))
     print("The size of the output layer is: n_y = " + str(n_y))
     print()
+    
+    #training model
     print("Training neural net. Loss display:")
-    parameters = nn_model(X, Y, n_h = 4, num_iterations = 15000, print_cost=True)
+    parameters = nn_model(X, Y, n_h = 4, num_iterations = 15000, print_cost=True) 
     print()
+    
+    #displaying classes
     plot_decision_boundary_NN(lambda x: predict(parameters, x), X.T, Y.T)
     plt.title("Decision Boundary for hidden layer size " + str(4))
     plt.show()
- 
+    
+    #class predictions based on weights and displays accuracy
     predictions = predict(parameters, X)
     print ('Accuracy: %d' % float((np.dot(Y,predictions.T) + np.dot(1-Y,1-predictions.T))/float(Y.size)*100) + '%')
     print()
+    
+    #user choice to see output of different hidden layer sizes
     option = int(input("Type 1 to see performance graphs of different sized hidden layers or type 2 to quit: "))
     
     if option == 1:
